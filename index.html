@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A local Karaoke site for keeping track of who's singing when with ease.">
+    <meta name="keywords" content="karaoke, sing, song queue, music, party, fun">
+    <meta name="author" content="Charlie Wightman">
+    <title>Crosfield Karaoke</title>
+    <link rel="stylesheet" href="styles.css">
+    
+</head>
+<body>
+    <header>
+        <h1>Crosfield Karaoke</h1>
+    </header>
+    <main>
+        <fieldset>
+            <legend>Enter a song!</legend>
+            <form>
+                <label class="whitetext" for="name">Name:</label>
+                <input class="whitetext" type="text" name="name" id="name" placeholder="Enter your name">
+                <label class="whitetext" for="song">Song:</label>
+                <input class="whitetext" type="text" name="song" id="song" placeholder="Enter your song">
+                <button class="whitetext" onclick="addToQueue()" type="button">Submit</button>
+            </form>
+        </fieldset>
+        <aside>
+            <h2 class="whitetext" id="listh2"></h2>
+            <ol id="queue">
+            </ol>
+        </aside>
+    </main>
+    <footer>
+        <p>Crosfield Karaoke created by <a href="https://github.com/charlierw1" target="_blank">Charlie Wightman</a></p>
+        <button onclick="clearQueue()" type="button">Reset Queue</button>
+    </footer>
+</body>
+<script>
+    let queue = JSON.parse(localStorage.getItem("queue")) || [];
+    const queueList = document.getElementById("queue");
+
+    function clearQueue() {
+        localStorage.clear();
+        queue = [];
+        queueList.innerHTML = "";
+        document.getElementById("listh2").textContent = "";
+    }
+
+    function showQueue() {
+        document.getElementById("listh2").textContent = "Song Queue:";
+        queueList.innerHTML = "";
+        queue.forEach(entry => {
+            let newEntry = document.createElement("li")
+            newEntry.textContent = entry;
+            queueList.appendChild(newEntry);
+        });
+    }
+
+    function addToQueue() {
+        let nameField = document.getElementById("name");
+        let songField = document.getElementById("song");
+        queue.push(`${nameField.value} singing ${songField.value}`);
+        localStorage.setItem("queue", JSON.stringify(queue));
+        nameField.value = "";
+        songField.value = "";
+        showQueue();
+    }
+
+    window.onload = showQueue();
+</script>
+</html>

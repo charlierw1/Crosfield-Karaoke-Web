@@ -1,0 +1,60 @@
+body {
+    background-color: #001EFF;
+    margin: auto;
+    width: 60%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif
+}
+
+a {
+    color: #E1FF00;
+}
+
+h1 {
+    font-size: 3vw;
+}
+
+h1, h2, p, legend, label, li {
+    color: white;
+}
+
+fieldset {
+    width: 40%;
+    margin-left: auto;
+    align-self: flex-start;
+}
+
+button {
+    background-color: #B3001B;
+    color: white;
+    border: none;
+}
+
+aside {
+    width: 40%;
+    margin: 0 auto auto auto;
+}
+
+header {
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+footer {
+    display: flex;
+    justify-content: space-evenly;
+    margin: auto;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form * {
+    padding: 0.5vw;
+    margin-top: 1vw;
+}
