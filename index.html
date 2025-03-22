@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-gb">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,8 +27,14 @@
             </form>
         </fieldset>
         <aside>
+            <fieldset id="controls">
+                <legend>Queue Controls</legend>
+                <button onclick="next()" type="button">Next Song</button>
+                <label for="remove">Select a song to be removed:</label>
+                <select name="remove" id="remove"></select>
+                <button onclick="remove()" type="button">Remove Selected Song</button>
+            </fieldset>
             <h2 id="listh2"></h2>
-            <button onclick="next()">Next Song</button>
             <ol id="queue">
             </ol>
         </aside>
