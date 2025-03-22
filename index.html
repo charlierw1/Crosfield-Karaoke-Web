@@ -13,20 +13,22 @@
 <body>
     <header>
         <h1>Crosfield Karaoke</h1>
+        <h2 id="current-song"></h2>
     </header>
     <main>
         <fieldset>
             <legend>Enter a song!</legend>
             <form>
-                <label class="whitetext" for="name">Name:</label>
-                <input class="whitetext" type="text" name="name" id="name" placeholder="Enter your name">
-                <label class="whitetext" for="song">Song:</label>
-                <input class="whitetext" type="text" name="song" id="song" placeholder="Enter your song">
-                <button class="whitetext" onclick="addToQueue()" type="button">Submit</button>
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name" placeholder="Enter your name">
+                <label for="song">Song:</label>
+                <input type="text" name="song" id="song" placeholder="Enter your song">
+                <button onclick="addToQueue()" type="button">Submit</button>
             </form>
         </fieldset>
         <aside>
-            <h2 class="whitetext" id="listh2"></h2>
+            <h2 id="listh2"></h2>
+            <button onclick="next()">Next Song</button>
             <ol id="queue">
             </ol>
         </aside>
@@ -45,13 +47,14 @@
         queue = [];
         queueList.innerHTML = "";
         document.getElementById("listh2").textContent = "";
+        document.getElementById("current-song").textContent = "";
     }
 
     function showQueue() {
         document.getElementById("listh2").textContent = "Song Queue:";
         queueList.innerHTML = "";
         queue.forEach(entry => {
-            let newEntry = document.createElement("li")
+            let newEntry = document.createElement("li");
             newEntry.textContent = entry;
             queueList.appendChild(newEntry);
         });
@@ -67,6 +70,14 @@
         showQueue();
     }
 
+    function next() {
+        if (queue.length > 0) {
+            document.getElementById("current-song").textContent = `Current song: ${queue.shift()}`;
+            showQueue();
+        } else {
+            document.getElementById("current-song").textContent = "Queue Empty"
+        }
+    }
     window.onload = showQueue();
 </script>
 </html>
