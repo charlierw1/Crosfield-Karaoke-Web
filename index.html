@@ -27,8 +27,13 @@
             </form>
         </fieldset>
         <aside>
+            <div id="controls-container">
+                <button onclick="next()">Next Song</button>
+                <label for="delete">Select a song to delete:</label>
+                <select name="delete" id="delete"></select>
+                <button onclick="deleteSelection(document.getElementById('delete').value)" type="button">Delete Selection</button>
+            </div>
             <h2 id="listh2"></h2>
-            <button onclick="next()">Next Song</button>
             <ol id="queue">
             </ol>
         </aside>
@@ -41,11 +46,14 @@
 <script>
     let queue = JSON.parse(localStorage.getItem("queue")) || [];
     const queueList = document.getElementById("queue");
+    const selectList = document.getElementById("delete");
 
     function clearQueue() {
         localStorage.clear();
         queue = [];
         queueList.innerHTML = "";
+        selectList.innerHTML = "";
+
         document.getElementById("listh2").textContent = "";
         document.getElementById("current-song").textContent = "";
     }
@@ -53,6 +61,13 @@
     function showQueue() {
         document.getElementById("listh2").textContent = "Song Queue:";
         queueList.innerHTML = "";
+        selectList.innerHTML = "";
+        queue.forEach(entry => {
+            let newEntry = document.createElement("option");
+            newEntry.textContent = entry;
+            newEntry.value = entry;
+            selectList.appendChild(newEntry);
+        });
         queue.forEach(entry => {
             let newEntry = document.createElement("li");
             newEntry.textContent = entry;
@@ -77,6 +92,14 @@
         } else {
             document.getElementById("current-song").textContent = "Queue Empty"
         }
+    }
+
+    function deleteSelection(selection) {
+        const itemIndex = queue.indexOf(selection);
+        if (itemIndex !== -1) {
+            queue.splice(itemIndex, 1);
+        }
+        showQueue();
     }
     window.onload = showQueue();
 </script>

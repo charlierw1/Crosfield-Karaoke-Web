@@ -32,6 +32,13 @@ button {
 aside {
     width: 40%;
     margin: 0 auto auto auto;
+    border: solid white 2px;
+    padding: 2rem;
+}
+
+aside * {
+    margin: 0.5rem;
+    padding: 0.5rem;
 }
 
 header {
@@ -57,4 +64,13 @@ form {
 form * {
     padding: 0.5vw;
     margin-top: 1vw;
+}
+
+#controls-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 50%;
+    height: 30%;
+    margin: auto;
 }
