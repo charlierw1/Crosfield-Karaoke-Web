@@ -16,27 +16,25 @@
         <h2 id="current-song"></h2>
     </header>
     <main>
-        <fieldset>
-            <legend>Enter a song!</legend>
-            <form>
+        <form>
+            <fieldset>
+                <legend>Enter a song</legend>
                 <label for="name">Name:</label>
                 <input type="text" name="name" id="name" placeholder="Enter your name">
                 <label for="song">Song:</label>
                 <input type="text" name="song" id="song" placeholder="Enter your song">
                 <button onclick="addToQueue()" type="button">Submit</button>
-            </form>
-        </fieldset>
-        <aside>
-            <div id="controls-container">
+            </fieldset>
+        </form>
+        <form> 
+            <fieldset>
+                <legend>Song Controls</legend>
                 <button onclick="next()">Next Song</button>
                 <label for="delete">Select a song to delete:</label>
                 <select name="delete" id="delete"></select>
                 <button onclick="deleteSelection(document.getElementById('delete').value)" type="button">Delete Selection</button>
-            </div>
-            <h2 id="listh2"></h2>
-            <ol id="queue">
-            </ol>
-        </aside>
+            </fieldset>
+        </form>
     </main>
     <footer>
         <p>Crosfield Karaoke created by <a href="https://github.com/charlierw1" target="_blank">Charlie Wightman</a></p>
