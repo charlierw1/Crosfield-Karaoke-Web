@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-gb">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,28 +16,25 @@
         <h2 id="current-song"></h2>
     </header>
     <main>
-        <fieldset>
-            <legend>Enter a song!</legend>
-            <form>
+        <form>
+            <fieldset>
+                <legend>Enter a song</legend>
                 <label for="name">Name:</label>
                 <input type="text" name="name" id="name" placeholder="Enter your name">
                 <label for="song">Song:</label>
                 <input type="text" name="song" id="song" placeholder="Enter your song">
                 <button onclick="addToQueue()" type="button">Submit</button>
-            </form>
-        </fieldset>
-        <aside>
-            <fieldset id="controls">
-                <legend>Queue Controls</legend>
-                <button onclick="next()" type="button">Next Song</button>
-                <label for="remove">Select a song to be removed:</label>
-                <select name="remove" id="remove"></select>
-                <button onclick="remove()" type="button">Remove Selected Song</button>
             </fieldset>
-            <h2 id="listh2"></h2>
-            <ol id="queue">
-            </ol>
-        </aside>
+        </form>
+        <form> 
+            <fieldset>
+                <legend>Song Controls</legend>
+                <button onclick="next()">Next Song</button>
+                <label for="delete">Select a song to delete:</label>
+                <select name="delete" id="delete"></select>
+                <button onclick="deleteSelection(document.getElementById('delete').value)" type="button">Delete Selection</button>
+            </fieldset>
+        </form>
     </main>
     <footer>
         <p>Crosfield Karaoke created by <a href="https://github.com/charlierw1" target="_blank">Charlie Wightman</a></p>
@@ -47,11 +44,14 @@
 <script>
     let queue = JSON.parse(localStorage.getItem("queue")) || [];
     const queueList = document.getElementById("queue");
+    const selectList = document.getElementById("delete");
 
     function clearQueue() {
         localStorage.clear();
         queue = [];
         queueList.innerHTML = "";
+        selectList.innerHTML = "";
+
         document.getElementById("listh2").textContent = "";
         document.getElementById("current-song").textContent = "";
     }
@@ -59,6 +59,13 @@
     function showQueue() {
         document.getElementById("listh2").textContent = "Song Queue:";
         queueList.innerHTML = "";
+        selectList.innerHTML = "";
+        queue.forEach(entry => {
+            let newEntry = document.createElement("option");
+            newEntry.textContent = entry;
+            newEntry.value = entry;
+            selectList.appendChild(newEntry);
+        });
         queue.forEach(entry => {
             let newEntry = document.createElement("li");
             newEntry.textContent = entry;
@@ -83,6 +90,14 @@
         } else {
             document.getElementById("current-song").textContent = "Queue Empty"
         }
+    }
+
+    function deleteSelection(selection) {
+        const itemIndex = queue.indexOf(selection);
+        if (itemIndex !== -1) {
+            queue.splice(itemIndex, 1);
+        }
+        showQueue();
     }
     window.onload = showQueue();
 </script>

@@ -1,8 +1,8 @@
 body {
     background-color: #001EFF;
-    margin: auto;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     width: 60%;
-    font-family: Verdana, Geneva, Tahoma, sans-serif
+    margin: auto;
 }
 
 a {
@@ -17,10 +17,8 @@ h1, h2, p, legend, label, li {
     color: white;
 }
 
-fieldset {
-    width: 40%;
-    margin-left: auto;
-    align-self: flex-start;
+form {
+    justify-content: center;
 }
 
 button {
@@ -29,29 +27,21 @@ button {
     border: none;
 }
 
-aside {
-    width: 40%;
-    margin: 0 auto auto auto;
+fieldset {
+    display: flex;
+    flex-direction: column;
 }
+
+
 
 header {
     text-align: center;
 }
 
-main {
-    display: flex;
-    flex-wrap: wrap;
-}
-
 footer {
     display: flex;
     justify-content: space-evenly;
-    margin: auto;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
+    margin-top: 2rem;
 }
 
 form * {
@@ -59,9 +49,11 @@ form * {
     margin-top: 1vw;
 }
 
-.controls {
-    width: 100%;
+#controls-container {
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
+    justify-content: space-between;
+    width: 50%;
+    height: 30%;
+    margin: auto;
 }
