@@ -13,9 +13,13 @@
 <body>
     <header>
         <h1>Crosfield Karaoke</h1>
-        <h2 id="current-song"></h2>
     </header>
     <main>
+        <section aria-live="polite">
+            <h2>Song Queue:</h2>
+            <p id="current-song">Queue Empty!</p>
+            <ol id="queue" aria-hidden="true"></ol>
+        </section>
         <form>
             <fieldset>
                 <legend>Enter a song</legend>
@@ -29,7 +33,7 @@
         <form> 
             <fieldset>
                 <legend>Song Controls</legend>
-                <button onclick="next()">Next Song</button>
+                <button type="button" onclick="next()">Next Song</button>
                 <label for="delete">Select a song to delete:</label>
                 <select name="delete" id="delete"></select>
                 <button onclick="deleteSelection(document.getElementById('delete').value)" type="button">Delete Selection</button>
@@ -50,14 +54,13 @@
         localStorage.clear();
         queue = [];
         queueList.innerHTML = "";
+        queueList.setAttribute("aria-hidden", "true");
         selectList.innerHTML = "";
 
-        document.getElementById("listh2").textContent = "";
-        document.getElementById("current-song").textContent = "";
+        document.getElementById("current-song").textContent = "Queue Empty!";
     }
 
     function showQueue() {
-        document.getElementById("listh2").textContent = "Song Queue:";
         queueList.innerHTML = "";
         selectList.innerHTML = "";
         queue.forEach(entry => {
@@ -71,6 +74,7 @@
             newEntry.textContent = entry;
             queueList.appendChild(newEntry);
         });
+        queueList.setAttribute("aria-hidden", "false");
     }
 
     function addToQueue() {
@@ -84,12 +88,13 @@
     }
 
     function next() {
-        if (queue.length > 0) {
-            document.getElementById("current-song").textContent = `Current song: ${queue.shift()}`;
-            showQueue();
+        if (queue.length == 0) {
+            document.getElementById("current-song").textContent = "Queue Empty!";
+            queueList.setAttribute("aria-hidden", "true");
         } else {
-            document.getElementById("current-song").textContent = "Queue Empty"
+            document.getElementById("current-song").textContent = `Current song: ${queue.shift()}`;
         }
+        showQueue()
     }
 
     function deleteSelection(selection) {
