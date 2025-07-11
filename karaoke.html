@@ -13,28 +13,35 @@
 <body>
     <header>
         <h1>Crosfield Karaoke</h1>
-        <h2 id="current-song"></h2>
     </header>
     <main>
-        <form>
-            <fieldset>
-                <legend>Enter a song</legend>
-                <label for="name">Name:</label>
-                <input type="text" name="name" id="name" placeholder="Enter your name">
-                <label for="song">Song:</label>
-                <input type="text" name="song" id="song" placeholder="Enter your song">
-                <button onclick="addToQueue()" type="button">Submit</button>
-            </fieldset>
-        </form>
-        <form> 
-            <fieldset>
-                <legend>Song Controls</legend>
-                <button onclick="next()">Next Song</button>
-                <label for="delete">Select a song to delete:</label>
-                <select name="delete" id="delete"></select>
-                <button onclick="deleteSelection(document.getElementById('delete').value)" type="button">Delete Selection</button>
-            </fieldset>
-        </form>
+        <section aria-live="polite" class="queue">
+            <h2>Song Queue:</h2>
+            <p id="current-song">No song is currently playing!</p>
+            <ol id="queue" aria-hidden="true"></ol>
+        </section>
+        <section>
+            <h2>Add and remove songs from the queue!</h2>
+            <form>
+                <fieldset>
+                    <legend>Enter a song</legend>
+                    <label for="name">Name:</label>
+                    <input type="text" name="name" id="name" placeholder="Enter your name">
+                    <label for="song">Song:</label>
+                    <input type="text" name="song" id="song" placeholder="Enter your song">
+                    <button onclick="addToQueue()" type="button">Submit</button>
+                </fieldset>
+            </form>
+            <form> 
+                <fieldset>
+                    <legend>Song Controls</legend>
+                    <button type="button" onclick="next()">Next Song</button>
+                    <label for="delete">Select a song to delete:</label>
+                    <select name="delete" id="delete"></select>
+                    <button onclick="deleteSelection(document.getElementById('delete').value)" type="button">Delete Selection</button>
+                </fieldset>
+            </form>
+        </section>
     </main>
     <footer>
         <p>Crosfield Karaoke created by <a href="https://github.com/charlierw1" target="_blank">Charlie Wightman</a></p>
@@ -43,6 +50,7 @@
 </body>
 <script>
     let queue = JSON.parse(localStorage.getItem("queue")) || [];
+    const empty = "No song is currently playing!";
     const queueList = document.getElementById("queue");
     const selectList = document.getElementById("delete");
 
@@ -52,31 +60,35 @@
         queueList.innerHTML = "";
         selectList.innerHTML = "";
 
-        document.getElementById("listh2").textContent = "";
-        document.getElementById("current-song").textContent = "";
+        document.getElementById("current-song").textContent = empty;
     }
 
     function showQueue() {
-        document.getElementById("listh2").textContent = "Song Queue:";
         queueList.innerHTML = "";
         selectList.innerHTML = "";
-        queue.forEach(entry => {
+        queue.forEach((entry, index) => {
             let newEntry = document.createElement("option");
-            newEntry.textContent = entry;
-            newEntry.value = entry;
+            newEntry.textContent = `${entry.name} singing ${entry.song}`;
+            newEntry.value = index;
             selectList.appendChild(newEntry);
         });
         queue.forEach(entry => {
             let newEntry = document.createElement("li");
-            newEntry.textContent = entry;
+            newEntry.innerHTML = `${entry.name} singing <a target="_blank" href="https://www.youtube.com/results?search_query=${entry.song} karaoke">${entry.song}</a>`;
             queueList.appendChild(newEntry);
         });
+        if (queueList.hasChildNodes()) {
+            queueList.setAttribute("aria-hidden", "false");
+        } else {
+            queueList.setAttribute("aria-hidden", "true");
+        }
     }
 
     function addToQueue() {
         let nameField = document.getElementById("name");
         let songField = document.getElementById("song");
-        queue.push(`${nameField.value} singing ${songField.value}`);
+        const entryLink = document.create
+        queue.push({name: nameField.value, song: songField.value});
         localStorage.setItem("queue", JSON.stringify(queue));
         nameField.value = "";
         songField.value = "";
@@ -84,19 +96,23 @@
     }
 
     function next() {
-        if (queue.length > 0) {
-            document.getElementById("current-song").textContent = `Current song: ${queue.shift()}`;
-            showQueue();
+        const current = document.getElementById("current-song");
+        if (queue.length == 0) {
+            current.textContent = empty;
         } else {
-            document.getElementById("current-song").textContent = "Queue Empty"
+            let entry = queue.shift();
+            let songLink = document.createElement("a");
+            songLink.href = `https://www.youtube.com/results?search_query=${entry.song} karaoke`;
+            songLink.target = "_blank"
+            songLink.innerHTML = `${entry.song}`
+            current.textContent = `Current song: ${entry.name} singing `;
+            current.appendChild(songLink);
         }
+        showQueue()
     }
 
     function deleteSelection(selection) {
-        const itemIndex = queue.indexOf(selection);
-        if (itemIndex !== -1) {
-            queue.splice(itemIndex, 1);
-        }
+        queue.splice(selection, 1)
         showQueue();
     }
     window.onload = showQueue();
