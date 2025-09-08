@@ -15,33 +15,32 @@
         <h1>Crosfield Karaoke</h1>
     </header>
     <main>
-        <section aria-live="polite" class="queue">
+        <section aria-live="polite" class="queue thin">
             <h2>Song Queue:</h2>
             <p id="current-song">No song is currently playing!</p>
             <ol id="queue" aria-hidden="true"></ol>
         </section>
-        <section>
-            <h2>Add and remove songs from the queue!</h2>
-            <form>
-                <fieldset>
-                    <legend>Enter a song</legend>
-                    <label for="name">Name:</label>
-                    <input type="text" name="name" id="name" placeholder="Enter your name">
-                    <label for="song">Song:</label>
-                    <input type="text" name="song" id="song" placeholder="Enter your song">
-                    <button onclick="addToQueue()" type="button">Submit</button>
-                </fieldset>
-            </form>
-            <form> 
-                <fieldset>
-                    <legend>Song Controls</legend>
-                    <button type="button" onclick="next()">Next Song</button>
-                    <label for="delete">Select a song to delete:</label>
-                    <select name="delete" id="delete"></select>
-                    <button onclick="deleteSelection(document.getElementById('delete').value)" type="button">Delete Selection</button>
-                </fieldset>
-            </form>
-        </section>
+        <h2 class="thin">Add and remove songs from the queue!</h2>
+        <form method="post" action="javascript:void(0);" class="thin">
+            <fieldset>
+                <legend>Enter a song</legend>
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name" placeholder="Enter your name">
+                <label for="song">Song:</label>
+                <input type="text" name="song" id="song" placeholder="Enter your song">
+                <button onclick="addToQueue()" type="button">Submit</button>
+            </fieldset>
+        </form>
+        <iframe width="420" height="315" id="video" src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen></iframe>
+        <form method="post" action="javascript:void(0);" class="thin"> 
+            <fieldset>
+                <legend>Song Controls</legend>
+                <button type="button" onclick="next()">Next Song</button>
+                <label for="delete">Select a song to delete:</label>
+                <select name="delete" id="delete"></select>
+                <button onclick="deleteSelection(document.getElementById('delete').value)" type="button">Delete Selection</button>
+            </fieldset>
+        </form>
     </main>
     <footer>
         <p>Crosfield Karaoke created by <a href="https://github.com/charlierw1" target="_blank">Charlie Wightman</a></p>
