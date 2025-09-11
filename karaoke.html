@@ -13,11 +13,6 @@
 <body>
     <header>
         <h1>Crosfield Karaoke</h1>
-        <nav>
-            <ul>
-                <li><a href="temp.html">test page</a></li>
-            </ul>
-        </nav>
     </header>
     <main>
         <section aria-live="polite" class="queue thin">
@@ -65,7 +60,7 @@
     const empty = "No song is currently playing!";
     const queueList = document.getElementById("queue");
     const selectList = document.getElementById("delete");
-    const API_KEY = 'AIzaSyCOyugFdGZ6QqCm9PcGw8l2IYQxaxfnOU8'; //dont leave the real one in lol
+    const API_KEY = 'API-KEY-HERE'; //dont leave the real one in lol
 
     async function searchYouTube(query) {
       const url = new URL('https://www.googleapis.com/youtube/v3/search');
