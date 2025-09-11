@@ -13,6 +13,11 @@
 <body>
     <header>
         <h1>Crosfield Karaoke</h1>
+        <nav>
+            <ul>
+                <li><a href="temp.html">test page</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
         <section aria-live="polite" class="queue thin">
@@ -20,8 +25,16 @@
             <p id="current-song">No song is currently playing!</p>
             <ol id="queue" aria-hidden="true"></ol>
         </section>
+        <section id="videobox" class="thin">
+            <h2>Video Box</h2>
+            <iframe title="video" width="768" height="432" id="video" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+            <section id="searchresults" aria-hidden="false">
+                
+            </section>
+        </section>
         <h2 class="thin">Add and remove songs from the queue!</h2>
-        <form method="post" action="javascript:void(0);" class="thin">
+        <section class="row">
+            <form method="post" action="javascript:void(0);" class="thin">
             <fieldset>
                 <legend>Enter a song</legend>
                 <label for="name">Name:</label>
@@ -31,7 +44,6 @@
                 <button onclick="addToQueue()" type="button">Submit</button>
             </fieldset>
         </form>
-        <iframe width="420" height="315" id="video" src="https://www.youtube.com/embed/tgbNymZ7vqY" allowfullscreen></iframe>
         <form method="post" action="javascript:void(0);" class="thin"> 
             <fieldset>
                 <legend>Song Controls</legend>
@@ -39,12 +51,13 @@
                 <label for="delete">Select a song to delete:</label>
                 <select name="delete" id="delete"></select>
                 <button onclick="deleteSelection(document.getElementById('delete').value)" type="button">Delete Selection</button>
+                <button onclick="clearQueue()" type="button">Reset Queue</button>
             </fieldset>
         </form>
+        </section>
     </main>
     <footer>
         <p>Crosfield Karaoke created by <a href="https://github.com/charlierw1" target="_blank">Charlie Wightman</a></p>
-        <button onclick="clearQueue()" type="button">Reset Queue</button>
     </footer>
 </body>
 <script>
@@ -52,6 +65,57 @@
     const empty = "No song is currently playing!";
     const queueList = document.getElementById("queue");
     const selectList = document.getElementById("delete");
+    const API_KEY = 'AIzaSyCOyugFdGZ6QqCm9PcGw8l2IYQxaxfnOU8'; //dont leave the real one in lol
+
+    async function searchYouTube(query) {
+      const url = new URL('https://www.googleapis.com/youtube/v3/search');
+      url.searchParams.set('part', 'snippet');
+      url.searchParams.set('q', query);
+      url.searchParams.set('type', 'video');
+      url.searchParams.set('maxResults', '5');
+      url.searchParams.set('key', API_KEY);
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        displayResults(data.items);
+      } catch (error) {
+        console.error('Error fetching YouTube data:', error);
+      }
+    }
+
+    function displayResults(items) {
+      const resultsBox = document.getElementById('searchresults');
+      resultsBox.innerHTML = '';
+      items.forEach(item => {
+        const videoId = item.id.videoId;
+        const li = document.createElement('li');
+        const fig = document.createElement("figure");
+        const figcap = document.createElement("figcaption");
+        const thumb = document.createElement("img");
+        thumb.width = "200";
+        thumb.height = "150";
+        thumb.src = `https://img.youtube.com/vi/${videoId}/0.jpg`;
+        figcap.innerHTML = `${item.snippet.title}`
+        fig.appendChild(thumb);
+        fig.appendChild(figcap);
+        fig.classList.add("video-option");
+        fig.addEventListener("click", function() {
+            setVideo(videoId);
+        });
+        resultsBox.appendChild(fig);
+      });
+    }
+
+    function setVideo(id) {
+        const video = document.getElementById("video");
+        if (id) {
+            video.style.visibility = true;
+            video.src = `https://www.youtube.com/embed/${id}`;
+        } else {
+            video.style.visibility = false;
+        }
+    }
 
     function clearQueue() {
         localStorage.clear();
@@ -76,11 +140,7 @@
             newEntry.innerHTML = `${entry.name} singing <a target="_blank" href="https://www.youtube.com/results?search_query=${entry.song} karaoke">${entry.song}</a>`;
             queueList.appendChild(newEntry);
         });
-        if (queueList.hasChildNodes()) {
-            queueList.setAttribute("aria-hidden", "false");
-        } else {
-            queueList.setAttribute("aria-hidden", "true");
-        }
+        queueList.setAttribute("aria-hidden", !queueList.hasChildNodes());
     }
 
     function addToQueue() {
@@ -95,6 +155,7 @@
     }
 
     function next() {
+        console.log("NEXT PRESSED")
         const current = document.getElementById("current-song");
         if (queue.length == 0) {
             current.textContent = empty;
@@ -102,10 +163,11 @@
             let entry = queue.shift();
             let songLink = document.createElement("a");
             songLink.href = `https://www.youtube.com/results?search_query=${entry.song} karaoke`;
-            songLink.target = "_blank"
+            songLink.target = "_blank";
             songLink.innerHTML = `${entry.song}`
             current.textContent = `Current song: ${entry.name} singing `;
             current.appendChild(songLink);
+            searchYouTube(`${entry.song} karaoke`);
         }
         showQueue()
     }
