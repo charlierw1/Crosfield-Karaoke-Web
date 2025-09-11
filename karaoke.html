@@ -23,9 +23,8 @@
         <section id="videobox" class="thin">
             <h2>Video Box</h2>
             <iframe title="video" width="768" height="432" id="video" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-            <section id="searchresults" aria-hidden="false">
-                
-            </section>
+            <button type="button" onclick="clearResults()">Remove search results!</button>
+            <section id="searchresults" aria-hidden="false"></section>
         </section>
         <h2 class="thin">Add and remove songs from the queue!</h2>
         <section class="row">
@@ -67,7 +66,7 @@
       url.searchParams.set('part', 'snippet');
       url.searchParams.set('q', query);
       url.searchParams.set('type', 'video');
-      url.searchParams.set('maxResults', '5');
+      url.searchParams.set('maxResults', '6');
       url.searchParams.set('key', API_KEY);
 
       try {
@@ -100,6 +99,7 @@
         });
         resultsBox.appendChild(fig);
       });
+      resultsBox.ariaHidden = !resultsBox.hasChildNodes;
     }
 
     function setVideo(id) {
@@ -117,8 +117,13 @@
         queue = [];
         queueList.innerHTML = "";
         selectList.innerHTML = "";
-
         document.getElementById("current-song").textContent = empty;
+    }
+
+    function clearResults() {
+        const searchresults = document.getElementById("searchresults");
+        searchresults.innerHTML = "";
+        searchresults.ariaHidden = true;
     }
 
     function showQueue() {
@@ -135,7 +140,7 @@
             newEntry.innerHTML = `${entry.name} singing <a target="_blank" href="https://www.youtube.com/results?search_query=${entry.song} karaoke">${entry.song}</a>`;
             queueList.appendChild(newEntry);
         });
-        queueList.setAttribute("aria-hidden", !queueList.hasChildNodes());
+        queueList.ariaHidden = !queueList.hasChildNodes();
     }
 
     function addToQueue() {
