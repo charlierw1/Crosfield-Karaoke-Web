@@ -8,7 +8,6 @@
     <meta name="author" content="Charlie Wightman">
     <title>Crosfield Karaoke</title>
     <link rel="stylesheet" href="styles.css">
-    
 </head>
 <body>
     <header>
@@ -23,8 +22,8 @@
         <section id="videobox" class="thin">
             <h2>Video Box</h2>
             <iframe title="video" width="768" height="432" id="video" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-            <button type="button" onclick="clearResults()">Remove search results!</button>
             <section id="searchresults" aria-hidden="false"></section>
+            <button type="button" onclick="clearResults()">Remove search results!</button>
         </section>
         <h2 class="thin">Add and remove songs from the queue!</h2>
         <section class="row">
@@ -68,7 +67,6 @@
       url.searchParams.set('type', 'video');
       url.searchParams.set('maxResults', '6');
       url.searchParams.set('key', API_KEY);
-
       try {
         const response = await fetch(url);
         const data = await response.json();
@@ -89,13 +87,20 @@
         const thumb = document.createElement("img");
         thumb.width = "200";
         thumb.height = "150";
-        thumb.src = `https://img.youtube.com/vi/${videoId}/0.jpg`;
-        figcap.innerHTML = `${item.snippet.title}`
+        thumb.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+        figcap.innerHTML = `${item.snippet.title}`;
         fig.appendChild(thumb);
         fig.appendChild(figcap);
         fig.classList.add("video-option");
+        fig.tabIndex = 0;
+        fig.role = "button";
         fig.addEventListener("click", function() {
             setVideo(videoId);
+        });
+        fig.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                setVideo(videoId);
+            }
         });
         resultsBox.appendChild(fig);
       });
@@ -146,7 +151,6 @@
     function addToQueue() {
         let nameField = document.getElementById("name");
         let songField = document.getElementById("song");
-        const entryLink = document.create
         queue.push({name: nameField.value, song: songField.value});
         localStorage.setItem("queue", JSON.stringify(queue));
         nameField.value = "";
@@ -155,7 +159,6 @@
     }
 
     function next() {
-        console.log("NEXT PRESSED")
         const current = document.getElementById("current-song");
         if (queue.length == 0) {
             current.textContent = empty;
