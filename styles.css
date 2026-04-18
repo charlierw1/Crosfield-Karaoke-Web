@@ -140,6 +140,10 @@ figcaption {
     padding: 1em;
 }
 
+#videobox[hidden] {
+    display: none;
+}
+
 #video {
     height: 40vw;
     width: 90%;
